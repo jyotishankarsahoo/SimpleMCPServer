@@ -1,7 +1,5 @@
 from mcp.server.fastmcp import FastMCP
-import playwright
 import asyncio
-import base64
 import subprocess
 import logging
 import sys
@@ -81,6 +79,19 @@ async def evaluate_js(script: str) -> str:
     except Exception as e:
         logger.error(f"Error evaluating JS {script}: {e}")
         return f"Error evaluating JS {script}: {e}"
+
+@mcp.tool()
+async def get_text_content() -> str:
+    """Get Visible Text Content of the Page"""
+    try:
+        await _ensure_browser()
+        content = await page.locator("body").inner_text()
+        if len(content) > 1000:
+            content = content[:1000] + "...(truncated)"
+        return f"Page Content: \n\n{content}"
+    except Exception as e:
+        logger.error(f"Error getting page content: {e}")
+        return f"Error getting page content: {e}"
 
 if __name__ == "__main__":
     try:
