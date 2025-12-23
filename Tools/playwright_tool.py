@@ -56,12 +56,32 @@ async def navigate(url) -> str:
 async def click(selector: str) -> str:
     """Click an element on the page"""
     try:
-        await _ensure_browser
+        await _ensure_browser()
         await page.click(selector)
     except Exception as e:
         logger.error(f"Error clicking element {selector}: {e}")
         return f"Error clicking element {selector}: {e}"
-    
+
+@mcp.tool()
+async def fill(selector: str, value: str) -> str:
+    """Fill value in selector on the page"""
+    try:
+        await _ensure_browser()
+        await page.fill(selector, value)
+    except Exception as e:
+        logger.error(f"Error filling element {selector}: {e}")
+        return f"Error filling element {selector}: {e}"
+
+@mcp.tool()
+async def evaluate_js(script: str) -> str:
+    """Execute Javascript on the page"""
+    try:
+        await _ensure_browser()
+        await page.evaluate(script)
+    except Exception as e:
+        logger.error(f"Error evaluating JS {script}: {e}")
+        return f"Error evaluating JS {script}: {e}"
+
 if __name__ == "__main__":
     try:
         mcp.run()
