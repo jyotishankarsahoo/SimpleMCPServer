@@ -51,6 +51,16 @@ async def navigate(url) -> str:
         return f"Navigated to {url}\n Page title {page_title}"
     except Exception as e:
         return f"Error navigating to {url}: {str(e)}"
+
+@mcp.tool()
+async def click(selector: str) -> str:
+    """Click an element on the page"""
+    try:
+        await _ensure_browser
+        await page.click(selector)
+    except Exception as e:
+        logger.error(f"Error clicking element {selector}: {e}")
+        return f"Error clicking element {selector}: {e}"
     
 if __name__ == "__main__":
     try:
