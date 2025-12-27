@@ -65,6 +65,7 @@ async def fill(selector: str, value: str) -> str:
     """Fill value in selector on the page"""
     try:
         await _ensure_browser()
+        
         await page.fill(selector, value)
     except Exception as e:
         logger.error(f"Error filling element {selector}: {e}")
